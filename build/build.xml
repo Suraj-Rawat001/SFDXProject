@@ -1,0 +1,49 @@
+<project xmlns:sf="antlib:com.salesforce" name="Deploy to Salesforce" default="deploy">
+
+  <taskdef resource="com/salesforce/antlib.xml" uri="antlib:com.salesforce" classpath="C:/Program Files/Jenkins/apache-ant-1.10.13/ant-salesforce.jar"/>
+
+  <!-- Setting up the credentials for the source org -->
+  <property file="build.properties"/>
+
+  <!-- Setting up the deploy task -->
+  <target name="deploy">
+    <sf:deploy username="suraj.rawat@growthnatives.com"
+               password="*Suraj123rawat#QLUQ0idNYzM71Pa0Z798zQWZ8"
+               serverurl="https://login.salesforce.com"
+               deployroot="C:\Program Files\Jenkins\src"
+               singlePackage="true"
+               checkOnly="false"
+               maxPoll="200"
+               pollWaitMillis="10000"
+               testLevel="RunSpecifiedTests"
+			   logType="Debugonly"
+               rollbackOnError="true"
+               apiVersion="56.0">
+		<runTest>OpportunityPerTransactionFeeUpdateTest</runTest>
+    </sf:deploy>
+
+    <!-- Retrieving the deployed Apex class from the source org -->
+    <sf:retrieve username="suraj.rawat@growthnatives.com"
+                 password="*Suraj123rawat#QLUQ0idNYzM71Pa0Z798zQWZ8"
+                 serverurl="https://login.salesforce.com"
+                 retrieveTarget="C:\Program Files\Jenkins\src"
+                 packageNames="MyPkg"
+                 apiVersion="56.0"/>
+
+    <!-- Deploying the retrieved Apex class to the target org -->
+    <sf:deploy username="rawat.suraj@growthnatives.com"
+               password="*surajrawat123#27mrDZCi2zPy9kVYAsmeq6KgY"
+               serverurl="https://login.salesforce.com"
+               deployroot="C:\Program Files\Jenkins\src"
+			   singlePackage="true"
+               checkOnly="false"
+               maxPoll="200"
+               pollWaitMillis="10000"
+               testLevel="RunSpecifiedTests"
+               logType="Debugonly"
+               rollbackOnError="true"
+               apiVersion="56.0">
+      <runTest>OpportunityPerTransactionFeeUpdateTest</runTest>
+    </sf:deploy>
+  </target>
+</project>
